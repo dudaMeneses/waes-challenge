@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Base64;
 import java.util.Optional;
 
 import static org.mockito.Mockito.doReturn;
@@ -33,7 +34,7 @@ public class DiffServiceSaveTest {
 
         doReturn(Optional.empty()).when(diffRepository).findById(123L);
 
-        diffService.save(123L, "test", DirectionEnum.left);
+        diffService.save(123L, Base64.getEncoder().encodeToString("test".getBytes()), DirectionEnum.LEFT);
 
         verify(diffRepository, times(1)).save(diff);
     }
@@ -44,7 +45,7 @@ public class DiffServiceSaveTest {
 
         doReturn(Optional.of(diff)).when(diffRepository).findById(123L);
 
-        diffService.save(123L, "test", DirectionEnum.left);
+        diffService.save(123L, Base64.getEncoder().encodeToString("test".getBytes()), DirectionEnum.LEFT);
     }
 
     @Test(expected = DirectionAlreadyLoadedException.class)
@@ -53,16 +54,27 @@ public class DiffServiceSaveTest {
 
         doReturn(Optional.of(diff)).when(diffRepository).findById(123L);
 
-        diffService.save(123L, "test", DirectionEnum.right);
+        diffService.save(123L, Base64.getEncoder().encodeToString("test".getBytes()), DirectionEnum.RIGHT);
     }
 
     @Test
-    public void whenDiffFound_shouldAddValueToDiff() throws DirectionAlreadyLoadedException {
+    public void whenDiffFoundAndDirectionIsLeft_shouldAddValueToDiff() throws DirectionAlreadyLoadedException {
         Diff diff = new Diff(123L, null, "test");
 
         doReturn(Optional.of(diff)).when(diffRepository).findById(123L);
 
-        diffService.save(123L, "test", DirectionEnum.left);
+        diffService.save(123L, Base64.getEncoder().encodeToString("test".getBytes()), DirectionEnum.LEFT);
+
+        verify(diffRepository, times(1)).save(new Diff(123L, "test", "test"));
+    }
+
+    @Test
+    public void whenDiffFoundAndDirectionIsRight_shouldAddValueToDiff() throws DirectionAlreadyLoadedException {
+        Diff diff = new Diff(123L, "test", null);
+
+        doReturn(Optional.of(diff)).when(diffRepository).findById(123L);
+
+        diffService.save(123L, Base64.getEncoder().encodeToString("test".getBytes()), DirectionEnum.RIGHT);
 
         verify(diffRepository, times(1)).save(new Diff(123L, "test", "test"));
     }

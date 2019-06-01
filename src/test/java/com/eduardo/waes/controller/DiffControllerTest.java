@@ -2,6 +2,9 @@ package com.eduardo.waes.controller;
 
 import com.eduardo.waes.domain.DirectionEnum;
 import com.eduardo.waes.exception.DirectionAlreadyLoadedException;
+import com.eduardo.waes.model.DiffResult;
+import com.eduardo.waes.model.DiffResultEnum;
+import com.eduardo.waes.model.Difference;
 import com.eduardo.waes.service.DiffService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,10 +22,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.Base64;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -82,7 +87,7 @@ public class DiffControllerTest {
 
         assertEquals(Long.valueOf(123L), idCaptor.getValue());
         assertEquals("test", new String(Base64.getDecoder().decode(valueCaptor.getValue())));
-        assertEquals(DirectionEnum.left, directionCaptor.getValue());
+        assertEquals(DirectionEnum.LEFT, directionCaptor.getValue());
     }
 
     @Test
@@ -122,7 +127,43 @@ public class DiffControllerTest {
 
         assertEquals(Long.valueOf(123L), idCaptor.getValue());
         assertEquals("test", new String(Base64.getDecoder().decode(valueCaptor.getValue())));
-        assertEquals(DirectionEnum.right, directionCaptor.getValue());
+        assertEquals(DirectionEnum.RIGHT, directionCaptor.getValue());
+    }
+
+    @Test
+    public void diff_whenDiffIsEqual_shouldRespondOnlyResultFieldAsEqual() throws Exception {
+        doReturn(new DiffResult(DiffResultEnum.EQUALS)).when(diffService).diff(123L);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/v1/diff/123")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andReturn();
+
+        assertEquals("{\"result\":\"EQUALS\"}", result.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void diff_whenDiffHaveDifferentSizes_shouldRespondOnlyResultFieldAsDifferentSize() throws Exception {
+        doReturn(new DiffResult(DiffResultEnum.DIFFERENT_SIZE)).when(diffService).diff(123L);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/v1/diff/123")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andReturn();
+
+        assertEquals("{\"result\":\"DIFFERENT_SIZE\"}", result.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void diff_whenDiffIsEqual_shouldRespondResultNotEqualsAndDifferences() throws Exception {
+        DiffResult diffResult = new DiffResult(DiffResultEnum.NOT_EQUALS);
+        diffResult.getDifferences().add(new Difference(0, 5));
+
+        doReturn(diffResult).when(diffService).diff(123L);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/v1/diff/123")
+                .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(status().isOk()).andReturn();
+
+        assertEquals("{\"result\":\"NOT_EQUALS\",\"differences\":[{\"offset\":0,\"length\":5}]}", result.getResponse().getContentAsString());
     }
 
 }

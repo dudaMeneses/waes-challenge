@@ -11,8 +11,8 @@ import java.lang.annotation.Target;
 @Documented
 @Target({ ElementType.FIELD, ElementType.PARAMETER })
 @Retention( RetentionPolicy.RUNTIME)
-@Constraint( validatedBy = IsBase64Impl.class)
-public @interface IsBase64 {
+@Constraint( validatedBy = Base64Impl.class)
+public @interface Base64 {
     String message() default "";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

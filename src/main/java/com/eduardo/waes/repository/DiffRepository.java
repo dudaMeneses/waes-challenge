@@ -1,20 +1,21 @@
 package com.eduardo.waes.repository;
 
 import com.eduardo.waes.domain.Diff;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Map;
 import java.util.Optional;
 
 @Repository
-public class DiffRepository {
+public interface DiffRepository extends CrudRepository<Diff, Long> {
 
-    private Map<Long, Diff> database;
-
-    public Optional<Diff> findById(Long id) {
-        return Optional.empty();
-    }
-
-    public void save(Diff diff) {
-    }
+    /**
+     * <p>Find entity by its id</p>
+     * @param id {@link Diff} unique identifier
+     * @return
+     */
+    @Query("select d from Diff d where d.id = :id")
+    Optional<Diff> findById(@Param("id") Long id);
 }

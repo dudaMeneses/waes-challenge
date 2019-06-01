@@ -5,7 +5,9 @@ import com.eduardo.waes.exception.DirectionAlreadyLoadedException;
 import com.eduardo.waes.exception.DirectionNotLoadedException;
 import com.eduardo.waes.model.DiffResult;
 import com.eduardo.waes.service.DiffService;
-import com.eduardo.waes.validation.IsBase64;
+import com.eduardo.waes.validation.Base64;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,31 +23,36 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Validated
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping(value = "/v1/diff")
+@Api(description = "Diff API")
 public class DiffController {
 
     @Autowired
     private DiffService diffService;
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping(path = "/{id}/left")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation("Store LEFT value provided")
     public void saveLeft(@PathVariable("id") Long id,
-                     @Valid @NotBlank @IsBase64 @RequestBody String value) throws DirectionAlreadyLoadedException {
-        diffService.save(id, value, DirectionEnum.left);
+                         @Valid @NotNull @NotBlank @Base64 @RequestBody String value) throws DirectionAlreadyLoadedException {
+        diffService.save(id, value, DirectionEnum.LEFT);
     }
 
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PostMapping(path = "/{id}/right")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation("Store RIGHT value provided")
     public void saveRight(@PathVariable("id") Long id,
-                     @Valid @NotBlank @IsBase64 @RequestBody String value) throws DirectionAlreadyLoadedException {
-        diffService.save(id, value, DirectionEnum.right);
+                          @Valid @NotNull @NotBlank @Base64 @RequestBody String value) throws DirectionAlreadyLoadedException {
+        diffService.save(id, value, DirectionEnum.RIGHT);
     }
 
     @ResponseStatus(HttpStatus.OK)
+    @ApiOperation("Diff RIGHT and LEFT values for the provided ID entity")
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public DiffResult getDiff(@PathVariable("id") Long id) throws DirectionNotLoadedException {
         return diffService.diff(id);
