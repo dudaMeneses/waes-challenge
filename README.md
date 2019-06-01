@@ -45,5 +45,7 @@ In case it scale, the information will be only inside the in-memory local contai
 For both security and configuration reason, it is better to have all environment related configuration outside application code.
 ##### Merge left and right endpoints into the same service
 Both implementation do basically the same, but for the opposite direction. It could be a second path parameter. 
+##### Implement contracts
+In case someone use this API in the future it's better to provide contracts to help on their development.
 
 
