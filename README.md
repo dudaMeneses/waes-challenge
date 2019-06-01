@@ -24,7 +24,7 @@ For integration tests I'm using ``SpringBootTest`` and proceeding with different
 
 ## Code
 ### Architecture
-I'm using Context Bound Pattern which it is quite good for microservices which we have a well defined scope. Also the package organization is separated by layer once spring-boot many times works better this way, like if necessary define packages to scan.  
+I'm using Context Bound Pattern which it is quite good for microservices because we have a well defined scope and if something is out of scope it represents, possibly, a point of integration. Also the package organization is separated by layer once spring-boot many times works better this way, like if necessary define packages to scan.  
 
 ### SpringBoot
 Following the idea of easily startable, auto-configurable and full of useful resources applications I choose to use spring-boot because it gives me an end-to-end option to create services and in case it runs in container it will be possible to scale easily.
