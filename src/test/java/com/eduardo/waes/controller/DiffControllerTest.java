@@ -1,6 +1,6 @@
 package com.eduardo.waes.controller;
 
-import com.eduardo.waes.domain.DirectionEnum;
+import com.eduardo.waes.model.DirectionEnum;
 import com.eduardo.waes.exception.DirectionAlreadyLoadedException;
 import com.eduardo.waes.model.DiffResult;
 import com.eduardo.waes.model.DiffResultEnum;

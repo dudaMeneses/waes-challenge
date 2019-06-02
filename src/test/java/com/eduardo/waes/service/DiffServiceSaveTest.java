@@ -1,7 +1,7 @@
 package com.eduardo.waes.service;
 
 import com.eduardo.waes.domain.Diff;
-import com.eduardo.waes.domain.DirectionEnum;
+import com.eduardo.waes.model.DirectionEnum;
 import com.eduardo.waes.exception.DirectionAlreadyLoadedException;
 import com.eduardo.waes.repository.DiffRepository;
 import org.junit.Test;

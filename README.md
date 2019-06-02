@@ -23,6 +23,8 @@ For unit testing I'm isolating the layers I have to really test only that unit.
 For integration tests I'm using ``SpringBootTest`` and proceeding with different test cases that certify all layers integrating properly, and not the logic of one or another, so, basically, I'm testing what goes at least beyond the controller layer.
 
 ## Code
+I believe in clean code and SOLID concepts as the main guideline to code, so I tried in my whole code follow this. Because of that, you will not see comments everywhere once the code should be sufficiently self explanatory. The only comments I certified to insert were related to decisions I made or public/class javadocs.
+
 ### Architecture
 I'm using Context Bound Pattern which it is quite good for microservices because we have a well defined scope and if something is out of scope it represents, possibly, a point of integration. Also the package organization is separated by layer once spring-boot many times works better this way, like if necessary define packages to scan.  
 

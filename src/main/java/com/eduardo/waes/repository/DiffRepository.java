@@ -8,6 +8,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * <p>Repository layer for {@link Diff} entity. Extends {@link CrudRepository} to reuse JPA save actions</p>
+ */
 @Repository
 public interface DiffRepository extends CrudRepository<Diff, Long> {
 

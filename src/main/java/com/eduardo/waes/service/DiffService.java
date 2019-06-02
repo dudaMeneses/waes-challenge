@@ -1,7 +1,7 @@
 package com.eduardo.waes.service;
 
 import com.eduardo.waes.domain.Diff;
-import com.eduardo.waes.domain.DirectionEnum;
+import com.eduardo.waes.model.DirectionEnum;
 import com.eduardo.waes.exception.DirectionAlreadyLoadedException;
 import com.eduardo.waes.exception.DirectionNotLoadedException;
 import com.eduardo.waes.model.DiffResult;
@@ -17,6 +17,9 @@ import javax.transaction.Transactional;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+/**
+ * <p>Business rules layer related to {@link Diff} entity. All the data processing and exceptions will come from here.</p>
+ */
 @Service
 public class DiffService {
 

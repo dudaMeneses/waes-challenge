@@ -8,6 +8,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * <p>Annotation to validate Base64 values. In case value isn't a Base64, it will throw a {@link javax.validation.ConstraintViolationException}</p>
+ */
 @Documented
 @Target({ ElementType.FIELD, ElementType.PARAMETER })
 @Retention( RetentionPolicy.RUNTIME)
